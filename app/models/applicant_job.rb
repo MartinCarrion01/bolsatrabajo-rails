@@ -1,5 +1,5 @@
 class ApplicantJob < ApplicationRecord
-    enum status: [:pendiente, :interesado, :contratado, :rechazado]
+    enum status: [:pendiente, :interesa, :contratado, :rechazado]
 
     belongs_to :applicant
     belongs_to :job

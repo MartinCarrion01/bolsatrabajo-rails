@@ -1,5 +1,5 @@
 class ApplicantsController < ApplicationController
-    before_action: :set_applicant, only: [:show, :update, :destroy]
+    before_action :set_applicant, only: [:show, :update, :destroy, :apply_to]
 
     def index
         @applicants = Applicant.all
@@ -56,6 +56,27 @@ class ApplicantsController < ApplicationController
             )
         else
             render_errors_response
+        end
+    end
+
+    def apply_to
+        @job = Job.find_by(id: params[:job_id])
+        
+        if @job.nil?
+            render(
+                json: {mensaje: "El trabajo al cual desea aplicar no existe"},
+                status: 404
+            )
+        else
+            @applicant_job = ApplicantJob.new(applicant: @applicant, job: @job)
+            if @applicant_job.save 
+                render(
+                    json: {mensaje: "El aplicante #{params[:id]} ha aplicado con éxito al trabajo"},
+                    status: 200
+                )
+            else
+                render_errors_response
+            end
         end
     end
 

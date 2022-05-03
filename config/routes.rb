@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   resources :companies, except: [:new, :edit] do 
     resources :jobs, only: [:create]
   end
-
   resources :jobs, only: [:index, :show, :update, :destroy]
   resources :applicants, except: [:new, :edit]
+
+  #rutas no REST
+  post '/applicants/:id/apply_to/:job_id', to: 'applicants#apply_to'
 end
