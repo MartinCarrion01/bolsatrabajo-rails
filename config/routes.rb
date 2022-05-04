@@ -11,4 +11,5 @@ Rails.application.routes.draw do
 
   #rutas no REST
   post '/applicants/:id/apply_to/:job_id', to: 'applicants#apply_to'
+  post '/jobs/:id/change_state/:applicant_id', to: 'jobs#change_state'
 end

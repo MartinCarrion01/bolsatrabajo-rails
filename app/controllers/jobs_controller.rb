@@ -7,7 +7,7 @@ class JobsController < ApplicationController
         if @jobs.length > 0
             render(
                 json: {jobs: @jobs},
-                status: 200
+                states: 200
             )
         else
             render(
@@ -68,11 +68,35 @@ class JobsController < ApplicationController
         end
     end
 
+    def change_state
+        @applicant_job = ApplicantJob.find_by(job_id: params[:id], applicant_id: params[:applicant_id])
+        if @applicant_job.nil?
+            render(
+                json: {mensaje: "La aplicación de trabajo a la cual desea cambiarle el estado no existe"},
+                status: 404
+            )
+        else
+            if @applicant_job.update(status: params[:status]) 
+                render(
+                    json: {mensaje: "La aplicación de trabajo ha cambiado su estado exitosamente"},
+                    status: 200
+                )
+            else
+                render_errors_response
+            end
+        end
+    end
+
+
     private
     def job_params
         params.require(:job).permit(:name, :description)
     end
-
+=begin
+    def applicant_job_params
+        params.require(:applicant_job).permit(:status)
+    end
+=end
     def set_job
         @job = Job.find_by(id: params[:id])
         if @job.nil?
